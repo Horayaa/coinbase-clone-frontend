@@ -1,14 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import axios from "axios";
 
+interface ProfileData {
+  name: string;
+  email: string;
+  createdAt: string;
+  portfolioValue: number;
+}
+
 export default function Profile() {
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
-  console.log(profile)
 
   useEffect(() => {
     axios
-      .get("/api/users/profile")
+      .get<ProfileData>("/api/users/profile")
       .then((res) => setProfile(res.data))
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -74,7 +80,13 @@ export default function Profile() {
   );
 }
 
-function InfoCard({ label, value, valueClass = "text-gray-900 font-medium" }) {
+interface InfoCardProps {
+  label: string;
+  value: ReactNode;
+  valueClass?: string;
+}
+
+function InfoCard({ label, value, valueClass = "text-gray-900 font-medium" }: InfoCardProps) {
   return (
     <div className="bg-gray-50 rounded-xl p-4">
       <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">{label}</p>

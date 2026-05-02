@@ -1,14 +1,23 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import CryptoTable from "../components/CryptoTable.jsx";
+import CryptoTable from "../components/CryptoTable";
+
+interface Coin {
+  _id: string;
+  name: string;
+  symbol: string;
+  price: number;
+  image: string;
+  change24h: number;
+}
 
 export default function Gainers() {
-  const [coins, setCoins] = useState([]);
+  const [coins, setCoins] = useState<Coin[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
-      .get("/api/crypto/gainers")
+      .get<Coin[]>("/api/crypto/gainers")
       .then((res) => setCoins(res.data))
       .catch(console.error)
       .finally(() => setLoading(false));
